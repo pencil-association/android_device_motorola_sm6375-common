@@ -167,11 +167,11 @@ BOARD_VENDOR_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 # Verified Boot
 BOARD_AVB_ENABLE := true
 
-ifneq ($(wildcard vendor/lineage-priv/keys/avb_vbmeta.pem),)
+ifneq ($(wildcard vendor/voltage-priv/keys/avb_vbmeta.pem),)
 AVB_CUSTOM_ALGORITHM := SHA256_RSA4096
-AVB_CUSTOM_KEY_PATH := vendor/lineage-priv/keys/avb_vbmeta.pem
+AVB_CUSTOM_KEY_PATH := vendor/voltage-priv/keys/avb_vbmeta.pem
 AVB_CUSTOM_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
-AVB_CUSTOM_VBMETA_SYSTEM_KEY_PATH := vendor/lineage-priv/keys/avb_vbmeta_system.pem
+AVB_CUSTOM_VBMETA_SYSTEM_KEY_PATH := vendor/voltage-priv/keys/avb_vbmeta_system.pem
 endif
 
 ifneq (,$(AVB_CUSTOM_KEY_PATH))
