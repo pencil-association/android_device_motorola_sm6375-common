@@ -250,3 +250,11 @@ vendor.usb.diag.func.name=ffs
 
 # Keep CamX on the board camera tables instead of its two-camera AOSP fallback.
 ro.vendor.qti.va_aosp.support=1
+
+# Camera
+persist.vendor.camera.privapp.list=org.codeaurora.snapcam,com.motorola.camera3
+persist.vendor.camera.physical.num=3
+vendor.camera.aux.packagelist2=com.motorola.ccc,com.android.settings,com.motorola.motointelligence
+ro.camera.cfa.packagelist=com.motorola.coresettingsext,com.motorola.camera2,com.motorola.camera3,com.motorola.actions
+ro.vendor.camera.noiseVibratortime=180
+
