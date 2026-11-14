@@ -100,6 +100,17 @@ blob_fixups: blob_fixups_user_type = {
     # DMA-BUF heap usage parameter the ION-era store lacks.
     'vendor/bin/hw/vendor.qti.media.c2@1.0-service': blob_fixup()
         .binary_regex_replace(rb'libqcodec2_core\.so', b'libqcodec2_shim.so'),
+    # The poll thread's frame rate estimate subtracts the previous output
+    # timestamp under a ubsan trap, so an EOS or post-seek buffer with an
+    # earlier timestamp aborts media.hwcodec. Clamp the delta to 0 instead,
+    # which the estimate already treats as unknown.
+    'vendor/lib64/libqcodec2_v4l2codec.so': blob_fixup()
+        .sig_replace(
+            '6c b9 40 f9 5f 01 00 71 ea 17 9f 1a cc 02 0c eb 43 8b 00 54',
+            '6c b9 40 f9 5f 01 00 71 ea 17 9f 1a cc 02 0c eb ec 33 8c 9a')
+        .sig_replace(
+            '89 05 00 34 0a b9 40 f9 c9 02 0a eb a3 84 00 54',
+            '89 05 00 34 0a b9 40 f9 c9 02 0a eb e9 33 89 9a'),
     'vendor/lib64/libsensorndkbridge.so': blob_fixup()
         .replace_needed('android.hardware.sensors-V2-ndk.so', 'android.hardware.sensors-V3-ndk.so'),
     'system_ext/etc/permissions/moto-telephony.xml': blob_fixup()
