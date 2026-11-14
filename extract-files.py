@@ -111,6 +111,16 @@ blob_fixups: blob_fixups_user_type = {
         .sig_replace(
             '89 05 00 34 0a b9 40 f9 c9 02 0a eb a3 84 00 54',
             '89 05 00 34 0a b9 40 f9 c9 02 0a eb e9 33 89 9a'),
+    # Advertise portrait encoder sizes within the 1080p macroblock budget, so
+    # screen recording uses the panel resolution instead of scaling to 1088
+    # lines.
+    'vendor/etc/media_codecs_blair.xml': blob_fixup()
+        .regex_replace(
+            r'(<MediaCodec name="c2\.qti\.(?:avc|hevc)\.encoder" type="[^"]+">\n'
+            r'(\s*)<Alias [^\n]*\n)'
+            r'\s*<Limit name="size" min="128x128" max="1920x1088" />\n',
+            r'\1\2<Limit name="size" min="128x128" max="1920x1920" />\n'
+            r'\2<Limit name="block-count" range="64-8160" />\n'),
     'vendor/lib64/libsensorndkbridge.so': blob_fixup()
         .replace_needed('android.hardware.sensors-V2-ndk.so', 'android.hardware.sensors-V3-ndk.so'),
     'system_ext/etc/permissions/moto-telephony.xml': blob_fixup()
