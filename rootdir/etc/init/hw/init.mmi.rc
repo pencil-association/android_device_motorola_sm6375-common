@@ -451,6 +451,11 @@ service vendor.mbm_spy /vendor/bin/mbm_spy
 on property:sys.boot_completed=1
     start vendor.mbm_spy
 
+on property:sys.boot_completed=1
+    # init.qcom.sh lowers the console to KERN_WARNING on user builds, which
+    # keeps driver errors and oops register dumps out of the pstore console.
+    write /proc/sys/kernel/printk "7 4 1 7"
+
 on init && property:ro.boot.mmi.bootlog=true
     start mmi-bootlog-logcat
     start mmi-bootlog
