@@ -419,8 +419,9 @@ vendor/lib64/libssc.so:vendor/lib64/libssc-stock.so
 vendor/lib64/sensors.moto.so;DISABLE_CHECKELF
 vendor/lib64/sensors.ssc.so
 
-# Camera - stock dependencies of the device camera stacks
+# Camera, Codec2 - stock C2D converter and its GPU blit backend
 vendor/lib64/libC2D2.so
+vendor/lib64/libc2d30_bltlib.so
 vendor/lib64/vendor.qti.hardware.vpp@1.2.so
 
 # Gatekeeper - stock, must match the gatekeeper TA in the stock TZ
