@@ -252,6 +252,7 @@ vendor.usb.diag.func.name=ffs
 ro.vendor.qti.va_aosp.support=1
 
 # Camera
+camera.disable_zsl_mode=1
 persist.vendor.camera.privapp.list=org.codeaurora.snapcam,com.motorola.camera3
 persist.vendor.camera.physical.num=3
 vendor.camera.aux.packagelist2=com.motorola.ccc,com.android.settings,com.motorola.motointelligence
