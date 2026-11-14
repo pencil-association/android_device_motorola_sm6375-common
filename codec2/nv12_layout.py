@@ -10,9 +10,17 @@ import tempfile
 STOCK_SHA1 = '7fdeaa9ca59db5e43b1761d2e6264e758c197c13'
 # Branches into the cave replace these 'mov w8, #0xf3fc' instructions.
 SITES = {0x3a418: bytes.fromhex('887f9e52'), 0x3a724: bytes.fromhex('887f9e52')}
-# QC2C2DEngine::calcStride jump table slot for YCbCr_420_SP_VENUS:
-# 0x27 is the 512-byte stride case, 0x1b the 128-byte one used for UBWC.
-STRIDE_SLOT, STRIDE_512, STRIDE_128 = 0x18dcc, 0x27, 0x1b
+# Jump table slots for YCbCr_420_SP_VENUS, as (stock, gralloc layout):
+# QC2C2DEngine::calcStride, 0x27 is the 512-byte stride case and 0x1b the
+# 128-byte one used for UBWC. QC2Buffer::Graphic::GetAlignedWidth and
+# GetAlignedHeight, which the V4L2 encoder uses to check queued input
+# buffers, take their UBWC cases (128-byte stride, 32-line luma) instead of
+# the 512 ones.
+TABLE_SLOTS = {
+    0x18dcc: (0x27, 0x1b),
+    0x18cf7: (0x1e, 0x00),
+    0x18cc8: (0x0e, 0x00),
+}
 CAVE = 0x449e0
 LIMIT = 0x45000
 RX_OFFSET = 0x20000
@@ -52,12 +60,14 @@ def patch_nv12(data):
         assert original[CAVE:len(payload)] == payload[CAVE:]
         for site in SITES:
             assert original[site:site + 4] == payload[site:site + 4]
-        assert original[STRIDE_SLOT] == STRIDE_128
+        for slot, (stock, patched) in TABLE_SLOTS.items():
+            assert original[slot] in (stock, patched)
         original[CAVE:len(payload)] = bytes(len(payload) - CAVE)
         struct.pack_into('<QQ', original, rx + 32, old_size, old_size)
         for site, instruction in SITES.items():
             original[site:site + 4] = instruction
-        original[STRIDE_SLOT] = STRIDE_512
+        for slot, (stock, _) in TABLE_SLOTS.items():
+            original[slot] = stock
     assert hashlib.sha1(original).hexdigest() == STOCK_SHA1
     assert struct.unpack_from('<QQ', original, rx + 32) == (old_size, old_size)
     assert not any(original[CAVE:LIMIT])
@@ -65,7 +75,9 @@ def patch_nv12(data):
     for site, instruction in SITES.items():
         assert original[site:site + 4] == instruction
         original[site:site + 4] = payload[site:site + 4]
-    original[STRIDE_SLOT] = STRIDE_128
+    for slot, (stock, patched) in TABLE_SLOTS.items():
+        assert original[slot] == stock
+        original[slot] = patched
     original[CAVE:len(payload)] = payload[CAVE:]
     struct.pack_into('<QQ', original, rx + 32, new_size, new_size)
     return bytes(original)
