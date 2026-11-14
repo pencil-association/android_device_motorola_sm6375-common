@@ -11,4 +11,4 @@ vendor/lib64/libqcodec2_v4l2codec.so|a8f01cd4245cd743f1239b125c524b5d9f24f4af|f4
 vendor/etc/media_blair/video_system_specs.json|38fb114eef72ae66968692a66c705cb41a25ccac
 
 # Malmo media_codecs_blair.xml with the veux c2.qti video entries
-vendor/etc/media_codecs_blair.xml|88e0978ce3b82bd74a752596a1439766d4af9fd6|77e9d9bb3ed362a9da3cfcaa5365e11e5fbe81df
+vendor/etc/media_codecs_blair.xml|88e0978ce3b82bd74a752596a1439766d4af9fd6|4a4ee052f3d6208bb01d1a3f6dab116548a5e9de
