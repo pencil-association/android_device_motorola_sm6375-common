@@ -100,6 +100,14 @@ blob_fixups: blob_fixups_user_type = {
     # DMA-BUF heap usage parameter the ION-era store lacks.
     'vendor/bin/hw/vendor.qti.media.c2@1.0-service': blob_fixup()
         .binary_regex_replace(rb'libqcodec2_core\.so', b'libqcodec2_shim.so'),
+    # Stats::status() turns the span between two buffer timestamps into a
+    # bitrate for the periodic stats log. A bogus timestamp makes span << 10
+    # overflow and the ubsan trap aborts media.hwcodec mid-playback. Take the
+    # zero-span path (bitrate 0) instead of the trap.
+    'vendor/lib64/libqcodec2_core.so': blob_fixup()
+        .sig_replace(
+            'c9 01 00 b4 ff db 49 eb c1 1b 00 54 80 42 40 fd',
+            'c9 01 00 b4 ff db 49 eb 81 01 00 54 80 42 40 fd'),
     # The poll thread's frame rate estimate subtracts the previous output
     # timestamp under a ubsan trap, so an EOS or post-seek buffer with an
     # earlier timestamp aborts media.hwcodec. Clamp the delta to 0 instead,
