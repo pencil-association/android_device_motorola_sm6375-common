@@ -1,0 +1,2 @@
+# The camera HAL enumerates every property at start; it only uses camera ones.
+dontaudit hal_camera_default property_type:file { getattr open read map };

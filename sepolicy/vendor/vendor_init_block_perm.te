@@ -4,7 +4,7 @@ type vendor_mmi_config_block_device, dev_type;
 init_daemon_domain(vendor_init_block_perm)
 
 allow vendor_init_block_perm vendor_toolbox_exec:file rx_file_perms;
-allow vendor_init_block_perm self:capability { chown fowner };
+allow vendor_init_block_perm self:capability { chown fowner fsetid };
 allow vendor_init_block_perm block_device:dir search;
 allow vendor_init_block_perm block_device:lnk_file r_file_perms;
 # Only adjust ownership/modes of the partitions named by this helper.
