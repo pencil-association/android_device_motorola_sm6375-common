@@ -6,3 +6,11 @@ allowxperm vendor_mmi_boot rtc_device:chr_file ioctl RTC_RD_TIME;
 allow vendor_mmi_boot block_device:dir search;
 allow vendor_mmi_boot block_device:lnk_file r_file_perms;
 allow vendor_mmi_boot vendor_utags_block_device:blk_file { getattr open write };
+
+# mbm_spy logs the kernel version, sizes the utags partition before reading
+# it and checks radio properties.
+allow vendor_mmi_boot proc_version:file r_file_perms;
+allow vendor_mmi_boot vendor_utags_block_device:blk_file { read map ioctl };
+allowxperm vendor_mmi_boot vendor_utags_block_device:blk_file ioctl BLKGETSIZE64;
+get_prop(vendor_mmi_boot, vendor_radio_prop)
+dontaudit vendor_mmi_boot default_prop:file { getattr open read map };

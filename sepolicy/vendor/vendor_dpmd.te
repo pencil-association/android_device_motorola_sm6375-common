@@ -1,0 +1,2 @@
+# dpmd looks up an AIDL diag HAL this device does not ship.
+dontaudit vendor_dpmd default_android_service:service_manager find;

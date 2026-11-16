@@ -137,6 +137,10 @@ blob_fixups: blob_fixups_user_type = {
             r'\s*<Limit name="size" min="96x96" max="1920x1088" />\n',
             r'\1\2<Limit name="size" min="96x96" max="1920x1920" />\n'
             r'\2<Limit name="block-count" range="36-8160" />\n'),
+    # Older libbase exported Trim(const std::string&); the multihal cannot
+    # dlopen the Moto sub-HAL without it.
+    'vendor/lib64/sensors.moto.so': blob_fixup()
+        .add_needed('libbase_shim.so'),
     'vendor/lib64/libsensorndkbridge.so': blob_fixup()
         .replace_needed('android.hardware.sensors-V2-ndk.so', 'android.hardware.sensors-V3-ndk.so'),
     'system_ext/etc/permissions/moto-telephony.xml': blob_fixup()

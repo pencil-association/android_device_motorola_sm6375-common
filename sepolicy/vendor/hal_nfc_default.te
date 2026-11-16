@@ -1,0 +1,2 @@
+# NXP NFC probes platform properties it does not need.
+dontaudit hal_nfc_default system_prop:file { getattr open read map };
