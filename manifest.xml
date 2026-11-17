@@ -28,10 +28,6 @@
         <transport>hwbinder</transport>
         <fqname>@4.1::IKeymasterDevice/default</fqname>
     </hal>
-    <hal format="aidl">
-        <name>android.hardware.secure_element</name>
-        <fqname>ISecureElement/eSE1</fqname>
-    </hal>
     <hal format="hidl">
         <name>com.qualcomm.qti.dpm.api</name>
         <transport>hwbinder</transport>
