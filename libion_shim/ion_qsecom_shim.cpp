@@ -12,6 +12,8 @@
  */
 
 #include <BufferAllocator/BufferAllocator.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <log/log.h>
 #include <unistd.h>
 
@@ -30,9 +32,6 @@ constexpr unsigned int kIonSystemHeap = 1u << 25;
 // ION buffers are uncached unless ION_FLAG_CACHED is set.
 constexpr unsigned int kIonFlagCached = 1u << 0;
 
-// Any non-negative value works as the "ion client": it is only passed back.
-constexpr int kIonClientFd = 0x10e0;
-
 BufferAllocator& Allocator() {
     static BufferAllocator allocator;
     return allocator;
@@ -50,18 +49,23 @@ std::string HeapForMask(unsigned int heap_mask, unsigned int flags) {
 
 }  // namespace
 
+// libion's ion_close() is close(), and the blobs use it to free buffer fds
+// as well as the client fd (the Egis TA client frees each QSEECom buffer
+// with ion_close(buf_fd)). So the "client" is a real fd and ion_close()
+// closes whatever it is given.
 extern "C" int ion_open() {
-    return kIonClientFd;
+    int fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
+    return fd < 0 ? -errno : fd;
 }
 
 extern "C" int ion_close(int fd) {
-    return fd == kIonClientFd ? 0 : -EINVAL;
+    return close(fd) ? -errno : 0;
 }
 
 extern "C" int ion_alloc_fd(int fd, size_t len, size_t align, unsigned int heap_mask,
                             unsigned int flags, int* handle_fd) {
     (void)align;
-    if (fd != kIonClientFd || handle_fd == nullptr) return -EINVAL;
+    if (fd < 0 || handle_fd == nullptr) return -EINVAL;
 
     static std::mutex lock;
     std::lock_guard<std::mutex> guard(lock);
