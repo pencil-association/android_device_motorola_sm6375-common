@@ -72,6 +72,15 @@ blob_fixups: blob_fixups_user_type = {
     # oem_2907, matching the modes Motorola uses for vendor.thermal-com.
     'vendor/etc/init/init_thermal-engine-v2.rc': blob_fixup()
         .regex_replace(r'(socket thermal-(?:send|recv-passive)-client stream) 0660', r'\1 0666'),
+    # The QHDC client blocks in AServiceManager_waitForService() for
+    # vendor.qti.qhcp.IQHDC/default, which no sm6375 build provides. libbinder
+    # retries every second for as long as the GNSS HAL runs, so the HAL,
+    # servicemanager and init all wake once a second, screen off included.
+    # Return "no service" instead; the caller already handles a null binder.
+    'vendor/lib64/libizat_core.so': blob_fixup()
+        .sig_replace(
+            '89 46 40 f9 1f 01 00 72 a0 02 89 9a 56 29 00 94 e0 0f 00 f9 e8 83 00 91',
+            '89 46 40 f9 1f 01 00 72 a0 02 89 9a e0 03 1f aa e0 0f 00 f9 e8 83 00 91'),
     'vendor/etc/media_profiles_blair.xml': blob_fixup()
         .regex_replace(r'\s+maxHFR(?:FrameWidth|FrameHeight|Mode)="[^"]*"', '')
         .regex_replace(r'\s*<(?:VideoEditorCap|ExportVideoProfile)\b[^>]*/>', ''),
