@@ -112,7 +112,8 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
-    android.hardware.camera.provider@2.4-service_64
+    android.hardware.camera.provider@2.4-service_64 \
+    camera.sm6375
 
 # Device ID attestation
 PRODUCT_COPY_FILES += \

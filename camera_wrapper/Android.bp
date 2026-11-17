@@ -1,0 +1,20 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+// Wraps camera.qcom.so so apps see the sensors' full manual exposure range.
+// Selected by ro.hardware.camera=sm6375.
+cc_library_shared {
+    name: "camera.sm6375",
+    vendor: true,
+    relative_install_path: "hw",
+    compile_multilib: "64",
+    srcs: ["CameraWrapper.cpp"],
+    header_libs: ["libhardware_headers"],
+    shared_libs: [
+        "libcamera_metadata",
+        "liblog",
+    ],
+    cflags: ["-Wall", "-Wextra", "-Werror"],
+}
