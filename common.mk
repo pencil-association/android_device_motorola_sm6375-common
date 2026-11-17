@@ -176,7 +176,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     vendor.lineage.health-service.default
 
-$(call soong_config_set,lineage_health,charging_control_charging_path,/sys/module/qpnp_adaptive_charge/parameters/charging_enabled)
+# The stock adaptive-charge module exposes limits, not a charging_enabled node.
+$(call soong_config_set_bool,lineage_health,charging_control_supports_toggle,false)
+$(call soong_config_set_bool,lineage_health,charging_control_supports_limit,true)
+$(call soong_config_set_bool,lineage_health,charging_control_supports_bypass,false)
+$(call soong_config_set,lineage_health,charging_control_limit_start_path,/sys/module/qpnp_adaptive_charge/parameters/lower_limit)
+$(call soong_config_set,lineage_health,charging_control_limit_stop_path,/sys/module/qpnp_adaptive_charge/parameters/upper_limit)
 
 # Media
 SM6375_HW_VIDEO ?= true
