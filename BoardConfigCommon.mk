@@ -87,6 +87,7 @@ AUDIO_FEATURE_ENABLED_INSTANCE_ID := true
 # and HAL 7.1.
 AUDIO_FEATURE_ENABLED_GKI := true
 AUDIO_FEATURE_ENABLED_HAL_V7 := true
+TARGET_USES_QCOM_AUDIO_AR := false
 
 # Display
 TARGET_USES_COLOR_METADATA := true
@@ -165,6 +166,7 @@ BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE := false
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_F2FS := true
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_UI_LIB := //$(COMMON_PATH):librecovery_ui_moto_sm6375
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
@@ -173,6 +175,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 include hardware/motorola/sepolicy/qti/SEPolicy.mk
 BOARD_VENDOR_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/system_ext
 ifneq ($(wildcard vendor/halcyon),)
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
 endif

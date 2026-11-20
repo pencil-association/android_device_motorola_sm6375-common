@@ -1,0 +1,10 @@
+recovery_only(`
+  # Initialize the OTA directories on the mounted metadata filesystem.
+  type_transition recovery metadata_file:dir ota_metadata_file "ota";
+  allow recovery metadata_file:dir { add_name relabelto write };
+  allow recovery ota_metadata_file:dir { create setattr };
+
+  # fs_mgr writes filesystem check output through logwrapper.
+  allow recovery fscklogs:dir { add_name search write };
+  allow recovery fscklogs:file create_file_perms;
+')

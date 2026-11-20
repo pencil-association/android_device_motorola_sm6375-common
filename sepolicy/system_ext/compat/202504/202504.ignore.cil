@@ -1,0 +1,11 @@
+;; System_ext types without a counterpart in the older public policy.
+(type new_objects)
+(typeattribute new_objects)
+(typeattributeset new_objects
+  ( new_objects
+    dummy_type_meant_to_prevent_selinux_compilation_from_failing_when_system_ext_public_dir_has_nothing_but_attributes
+    vendor_display_notch_prop
+    vendor_persist_ntn_prop
+    vendor_qvirtmgr_prop
+    vendor_sys_qti_display
+  ))

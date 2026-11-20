@@ -1,2 +1,0 @@
-# Adaptive charging limits are labeled by the Motorola battery policy.
-allow hal_lineage_health_default vendor_sysfs_battery_supply:file rw_file_perms;

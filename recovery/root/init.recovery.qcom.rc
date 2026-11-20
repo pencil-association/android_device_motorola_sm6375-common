@@ -27,6 +27,7 @@
 
 on early-init
     write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1
+    mkdir /dev/fscklogs 0770 root system
 
 on init
     write /sys/class/backlight/panel0-backlight/brightness 200
@@ -45,6 +46,9 @@ on fs
     # Load ADSP firmware for PMIC
     mkdir /firmware
     mount ext4 /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro context=u:object_r:firmware_file:s0
+
+on post-fs
+    start vendor.boot-qti
 
 on property:dev.mnt.blk.firmware=*
     write /sys/kernel/boot_adsp/boot 1

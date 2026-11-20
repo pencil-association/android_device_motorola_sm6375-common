@@ -1,2 +1,5 @@
+# NFC properties labeled by Motorola's shared vendor policy.
+vendor_internal_prop(vendor_nfc_prop)
+
 # Power
 vendor_internal_prop(vendor_powerhal_prop)

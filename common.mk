@@ -26,8 +26,6 @@ PRODUCT_PACKAGES += \
     FrameworksResProduct \
     FrameworksResTarget \
     LineageApertureAppCommon \
-    LineageSdkOverlayCommon \
-    LineageSettingsProviderOverlayCommon \
     NcmTetheringOverlay \
     SettingsProviderResCommon \
     SettingsResCommon \
@@ -62,7 +60,7 @@ PRODUCT_COPY_FILES += \
 
 # Audio
 $(call soong_config_set,android_hardware_audio,run_64bit,true)
-$(call soong_config_set_bool, android_hardware_audio, skip_speaker_layout_channel_mask_field, true)
+$(call soong_config_set,android_hardware_audio,skip_speaker_layout_channel_mask_field,true)
 
 # Legacy APR/Q6 primary HAL for the stock ADSP (sm8350 family HAL). Its
 # module keeps the name audio.primary.fogos.
@@ -105,6 +103,7 @@ PRODUCT_COPY_FILES += \
 BOARD_SHIPPING_API_LEVEL := 30
 
 # Boot control
+PRODUCT_SOONG_NAMESPACES += hardware/qcom-caf/bootctrl
 PRODUCT_PACKAGES += \
     android.hardware.boot-service.qti \
     android.hardware.boot-service.qti.recovery
@@ -171,17 +170,6 @@ PRODUCT_PACKAGES += \
 # IPC router config
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sec_config:$(TARGET_COPY_OUT_VENDOR)/etc/sec_config
-
-# Lineage Health
-PRODUCT_PACKAGES += \
-    vendor.lineage.health-service.default
-
-# The stock adaptive-charge module exposes limits, not a charging_enabled node.
-$(call soong_config_set_bool,lineage_health,charging_control_supports_toggle,false)
-$(call soong_config_set_bool,lineage_health,charging_control_supports_limit,true)
-$(call soong_config_set_bool,lineage_health,charging_control_supports_bypass,false)
-$(call soong_config_set,lineage_health,charging_control_limit_start_path,/sys/module/qpnp_adaptive_charge/parameters/lower_limit)
-$(call soong_config_set,lineage_health,charging_control_limit_stop_path,/sys/module/qpnp_adaptive_charge/parameters/upper_limit)
 
 # Media
 SM6375_HW_VIDEO ?= true
@@ -311,30 +299,10 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/qcom-caf/wlan/qcwcn \
     hardware/motorola
 
-# Telephony
+# Motorola additions to the inherited CLO telephony stack
 PRODUCT_PACKAGES += \
-    extphonelib \
-    extphonelib-product \
-    extphonelib.xml \
-    extphonelib_product.xml \
     MotoNrEnabler \
-    ims-ext-common \
-    ims_ext_common.xml \
-    qti-telephony-hidl-wrapper \
-    qti-telephony-hidl-wrapper-prd \
-    qti_telephony_hidl_wrapper.xml \
-    qti_telephony_hidl_wrapper_prd.xml \
-    qti-telephony-utils \
-    qti-telephony-utils-prd \
-    qti_telephony_utils.xml \
-    qti_telephony_utils_prd.xml \
-    telephony-ext
-
-PRODUCT_PACKAGES += \
     qcrilNrDb_vendor
-
-PRODUCT_BOOT_JARS += \
-    telephony-ext
 
 # Thermal
 PRODUCT_PACKAGES += \
